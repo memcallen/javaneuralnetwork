@@ -10,6 +10,13 @@ public class NeuralNetwork {
 
         public void updateInfo(float bias, float[] weights, float threshold);
 
+        /**
+         * Utility Function
+         * @param Inputs Input Neurons
+         * @param bias bias
+         * @param weights weights
+         * @param threshold threshold
+         */
         public void setInputs(Neuron[] Inputs, float bias, float[] weights, float threshold);
 
         public float getOutput();
@@ -196,6 +203,14 @@ public class NeuralNetwork {
 
         public boolean isInputLayer = false;
 
+        /**
+         * 
+         * @param length Number of neurons to use
+         * @param type Type of Neuron (Input, Perceptron, Sigmoid)
+         * @param defaultWeight Default weight for initialized neurons
+         * @param defaultBias Default bias for initialized neurons
+         * @param defaultThreshold Default threshold for initialized neurons
+         */
         public Layer(int length, Class<? extends Neuron> type, float defaultWeight, float defaultBias, float defaultThreshold) {
             neurons = (Neuron[]) Array.newInstance(type, length);
             this.defaultWeight = defaultWeight;
@@ -264,10 +279,19 @@ public class NeuralNetwork {
 
         }
 
+        /**
+         * Makes this layer an input layer
+         */
         public void setInputLayer() {
             isInputLayer = true;
         }
 
+        
+        /**
+         * @param parent Parent Layer
+         * 
+         * Sets the parent layer
+         */
         public void setParentLayer(Layer parent) {
             isInputLayer = false;
             this.parent = parent;
@@ -286,6 +310,11 @@ public class NeuralNetwork {
 
         }
 
+        /**
+         * @param l random seed
+         * 
+         * Initializes neurons with a random bias and weight, keeping the defaultThreshold
+         */
         public void initGaus(long l) {
             Random r = new Random(l);
             for (Neuron n : neurons) {
@@ -297,16 +326,31 @@ public class NeuralNetwork {
             }
         }
 
+        /**
+         * @param neuron Neuron index
+         * @param input input float
+         * 
+         * Sets an individual neuron's input
+         */
         public void setNeuronInput(int neuron, float input) {
             if (isInputLayer) {
                 ((InputNeuron) neurons[neuron]).setInput(input);
             }
         }
 
+        /**
+         * @param neuron Neuron index
+         * @return neuron's output
+         */
         public float getNeuronOutput(int neuron) {
             return neurons[neuron].getOutput();
         }
 
+        /**
+         * @param v input vector of all neuron inputs
+         * 
+         * Sets the input vector for all neurons in layer
+         */
         public void setInput(IOVector v) {
             float[] data = v.getData();
 
@@ -320,6 +364,9 @@ public class NeuralNetwork {
 
         }
 
+        /**
+         * @return vector of all neurons' output in this layer
+         */
         public IOVector getOutput() {
             float[] v = new float[neurons.length];
             for (int i = 0; i < neurons.length; i++) {
@@ -334,7 +381,12 @@ public class NeuralNetwork {
     public static class IOVector {
 
         float[] vector = null;
-
+        
+        /**
+         * @param vector Input vector
+         * 
+         * Utility class to represent a vector
+         */
         public IOVector(float[] vector) {
             this.vector = vector;
         }
@@ -356,6 +408,13 @@ public class NeuralNetwork {
 
     }
 
+    /**
+     * @param Output Calculated output vector
+     * @param Goal Input data's expect output
+     * @return cost
+     * 
+     * Backprop quadratic cost function
+     */
     public static float C(IOVector Output, IOVector Goal) {
 
         float[] output = Output.getData();
