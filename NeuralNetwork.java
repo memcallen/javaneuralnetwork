@@ -6,7 +6,6 @@ import java.util.Random;
 
 public class NeuralNetwork {
 
-    //no more than 18
     public static interface Neuron {
 
         public void updateInfo(float bias, float[] weights, float threshold);
